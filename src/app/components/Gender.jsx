@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { Bar } from "react-chartjs-2";
 import {
@@ -16,8 +16,25 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Gender() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isScoreDropdownOpen, setIsScoreDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("Good");
+  const [selectedScore, setSelectedScore] = useState("Glucose Metabolism Score");
+
   const ageGroups = ["18–24 yrs", "25–32 yrs", "33–40 yrs", "40–50 yrs", "50< yrs"];
 
+  const options = ["Good", "Fair", "Poor"];
+  const scoreOptions = ["Glucose Metabolism Score", "Sugar", "Liver", "Gut", "Respiratory Score"];
+
+  const handleOptionSelect = (option) => {
+    setSelectedOption(option);
+    setIsDropdownOpen(false);
+  };
+
+  const handleScoreSelect = (score) => {
+    setSelectedScore(score);
+    setIsScoreDropdownOpen(false);
+  };
 
   const maleData = {
     labels: ageGroups,
@@ -26,11 +43,9 @@ export default function Gender() {
         label: "Male",
         data: [10, 10, 15, 5, 8],
         backgroundColor: "#FF8E6F",
-
       },
     ],
   };
-
 
   const femaleData = {
     labels: ageGroups,
@@ -39,7 +54,6 @@ export default function Gender() {
         label: "Female",
         data: [8, 8, 13, 3, 15],
         backgroundColor: "#9100FF",
-
       },
     ],
   };
@@ -84,7 +98,6 @@ export default function Gender() {
     },
   };
 
-
   const femaleOptions = {
     indexAxis: "y",
     responsive: true,
@@ -126,13 +139,9 @@ export default function Gender() {
     plugins: { legend: { display: false }, tooltip: { enabled: false } },
   };
 
-
-
   return (
     <>
-
       <div className="w-full rounded-[15px] p-5 border border-[#D9D9D9]">
-
         <div className="flex flex-col items-center">
           <p className="font-normal text-[20px] text-[#252525] tracking-[-0.04em] whitespace-nowrap">
             Gender & Age Wise Score Analytics
@@ -142,31 +151,87 @@ export default function Gender() {
           </p>
         </div>
 
-
-        <div className="flex gap-5 mt-4">
-          <div className="flex gap-[5px] p-[25px] items-center border border-[#C7C6CE] rounded-[10px]">
-            <p className="font-medium text-[15px] text-[#535359] tracking-[-0.04em] whitespace-nowrap hidden md:block">
-              Glucose Metabolism Score
-            </p>
-            <p className="font-medium text-[15px] text-[#535359] tracking-[-0.04em] whitespace-nowrap md:hidden">
-              Respiratory Score
-            </p>
-            <IoIosArrowDown className="text-[#535359]" />
+        <div className="flex gap-5 mt-4 justify-center">
+          {/* Score Type Dropdown */}
+          <div className="relative">
+            <div 
+              className="flex gap-[5px] p-[25px] items-center border border-[#C7C6CE] rounded-[10px] cursor-pointer"
+              onClick={() => setIsScoreDropdownOpen(!isScoreDropdownOpen)}
+            >
+              <p className="font-medium text-[15px] text-[#535359] tracking-[-0.04em] whitespace-nowrap hidden md:block">
+                {selectedScore}
+              </p>
+              <p className="font-medium text-[15px] text-[#535359] tracking-[-0.04em] whitespace-nowrap md:hidden">
+                {selectedScore === "Glucose Metabolism Score" ? "Respiratory Score" : selectedScore}
+              </p>
+              <IoIosArrowDown className="text-[#535359]" />
+            </div>
+            
+            {/* Score Dropdown Menu */}
+            {isScoreDropdownOpen && (
+              <div className="absolute whitespace-nowrap top-full left-0 right-0 mt-1 bg-white border border-[#C7C6CE] rounded-[10px] shadow-lg z-20 min-w-[226px]">
+                {scoreOptions.map((score) => (
+                  <div
+                    key={score}
+                    className={`p-3 cursor-pointer hover:bg-gray-50 first:rounded-t-[10px] last:rounded-b-[10px] ${
+                      selectedScore === score ? "bg-gray-50" : ""
+                    }`}
+                    onClick={() => handleScoreSelect(score)}
+                  >
+                    <p className="font-medium text-[15px] text-[#535359] tracking-[-0.04em]">
+                      {score}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="flex gap-[5px] p-[25px] items-center border border-[#C7C6CE] rounded-[10px]">
-            <p className="text-[#3FAF58] font-medium tracking-[-0.02em]">Good</p>
-            <IoIosArrowDown className="text-[#535359]" />
+          {/* Quality Dropdown (Good, Fair, Poor) */}
+          <div className="relative">
+            <div 
+              className="flex gap-[5px] p-[25px] items-center border border-[#C7C6CE] rounded-[10px] cursor-pointer"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <p className={`font-medium tracking-[-0.02em] ${
+                selectedOption === "Good" ? "text-[#3FAF58]" : 
+                selectedOption === "Fair" ? "text-[#f59e0b]" : 
+                "text-[#ef4444]"
+              }`}>
+                {selectedOption}
+              </p>
+              <IoIosArrowDown className="text-[#535359]" />
+            </div>
+            
+            {/* Quality Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#C7C6CE] rounded-[10px] shadow-lg z-10">
+                {options.map((option) => (
+                  <div
+                    key={option}
+                    className={`p-3 cursor-pointer hover:bg-gray-50 first:rounded-t-[10px] last:rounded-b-[10px] ${
+                      selectedOption === option ? "bg-gray-50" : ""
+                    }`}
+                    onClick={() => handleOptionSelect(option)}
+                  >
+                    <p className={`font-medium tracking-[-0.02em] ${
+                      option === "Good" ? "text-[#3FAF58]" : 
+                      option === "Fair" ? "text-[#f59e0b]" : 
+                      "text-[#ef4444]"
+                    }`}>
+                      {option}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-
         <div className="mt-4 p-2 flex items-center justify-center border-b border-b-gray-300">
-
           <div style={{ width: "136px", height: "200px" }}>   
             <Bar data={maleData} options={maleOptions} />
           </div>
-
 
           <div className="mt-1" style={{ width: "80px", fontSize: "12px" }}>
             {ageGroups.map((age, i) => (
@@ -176,32 +241,30 @@ export default function Gender() {
             ))}
           </div>
 
-
-
           <div style={{ width: "136px", height: "200px" }}>
             <Bar data={femaleData} options={femaleOptions} />
           </div>
         </div>
-        <div className="flex  items-center justify-center mt-5 gap-10">
-          <div className="flex  gap-2 items-center">
+        
+        <div className="flex items-center justify-center mt-5 gap-10">
+          <div className="flex gap-2 items-center">
             <p className="h-5 w-5 bg-[#FF8E6F] rounded-[5px]"></p>
             <p className="font-medium text-[12px] tracking-[-0.02em] text-[#535359]">Male</p>
           </div>
-          <div className="flex  gap-2 items-center">
+          <div className="flex gap-2 items-center">
             <p className="h-5 w-5 bg-[#9100FF] rounded-[5px]"></p>
             <p className="font-medium text-[12px] tracking-[-0.02em] text-[#535359]">Female</p>
           </div>
         </div>
       </div>
 
-
-      <div className="flex gap-[5px] w-full  md:bg-[#F5F7FA]  rounded-[25px] mt-6 p-4">
-
-        <div className=" hidden md:flex flex-col md:w-full w-2/3 gap-[40px] md:gap-0 justify-between p-4 bg-white rounded-[25px]">
+      {/* Rest of your existing code remains the same */}
+      <div className="flex gap-[5px] w-full md:bg-[#F5F7FA] rounded-[25px] mt-6 p-4">
+        <div className="hidden md:flex flex-col md:w-full w-2/3 gap-[40px] md:gap-0 justify-between p-4 bg-white rounded-[25px]">
           <p className="text-[#A1A1A1] font-normal text-[12px] tracking-[-0.02em]">
             Last synced 12 min ago
           </p>
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <span className="font-normal text-[30px] text-[#252525] tracking-[-0.02em]">
               75
             </span>
@@ -211,12 +274,11 @@ export default function Gender() {
           </div>
         </div>
 
-
-        <div className=" hidden md:flex flex-col  w-full justify-between p-4 rounded-r-[25px]">
+        <div className="hidden md:flex flex-col w-full justify-between p-4 rounded-r-[25px]">
           <p className="text-[#A1A1A1] font-normal text-[12px] tracking-[-0.02em]">
             Last synced 12 min ago
           </p>
-          <p className=" w-full h-[10px] bg-white mt-10 mb-4 rounded-[18px]">
+          <p className="w-full h-[10px] bg-white mt-10 mb-4 rounded-[18px]">
             <span className="block w-2/3 rounded-l-[18px] h-[10px] bg-[#3FAF58]"> </span>
           </p>
           <div className="flex flex-col items-start">
@@ -228,21 +290,18 @@ export default function Gender() {
             </span>
           </div>
         </div>
-
-
       </div>
-      <div className="md:hidden  w-full justify-between p-2 rounded-[15px] bg-[linear-gradient(90deg,_#99C7FF_0%,_#5FA8FF_100%)]
-">
+      
+      <div className="md:hidden w-full justify-between p-2 rounded-[15px] bg-[linear-gradient(90deg,_#99C7FF_0%,_#5FA8FF_100%)]">
         <div className="flex flex-col gap-3 w-[245px] p-3 rounded-[10px] bg-[#E0EEFF]">
           <p className="text-[#A1A1A1] font-normal text-[12px] tracking-[-0.02em]">
             Last synced 12 min ago
           </p>
-
           <div className="flex flex-col items-start">
             <span className="font-normal text-[30px] text-[#252525] tracking-[-0.02em]">
               75
             </span>
-            <span className="font-normal leading-[15px]   text-[#252525] text-[15px] tracking-[-0.02em]">
+            <span className="font-normal leading-[15px] text-[#252525] text-[15px] tracking-[-0.02em]">
               Employees
             </span>
             <span className="font-normal text-[#252525] text-[15px] tracking-[-0.02em]">

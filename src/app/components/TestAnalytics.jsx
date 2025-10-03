@@ -322,7 +322,7 @@ export default function TestAnalytics() {
         </div>
 
         <div className="flex flex-col gap-[25px]">
-          <div className="max-h-[300px] overflow-y-auto pr-2">
+          <div className="max-h-[300px] overflow-y-auto pr-2 scrollbar-hide">
             {testData.map((log, index) => (
               <div
                 key={index}

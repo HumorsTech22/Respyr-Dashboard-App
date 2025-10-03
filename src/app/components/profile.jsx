@@ -9,7 +9,7 @@ export const Profile = () => {
                 <span className='text-[#535359] text-[15px] font-normal leading-normal tracking-[-0.6px]'>Go Back</span>
             </div>
 
-            <div className='flex flex-col gap-5'>
+            <div className='flex flex-col gap-5 '>
                 <Image
                     src="/assets/img/Group 2216.svg"
                     width={80}
@@ -36,24 +36,24 @@ export const Profile = () => {
             </div>
 
             <div className='flex flex-col gap-5'>
-                <div className='flex gap-[77px] items-center'>
+                <div className='flex justify-between items-center'>
                     <span className='text-[#252525] font-normal leading-[110%] tracking-[-0.24px]'>Date of Birth</span>
                     <span className='text-[#535359] text-[12px] font-normal leading-[110%] tracking-[-0.24px]'>12 August 2024</span>
                 </div>
 
 
 
-                <div className='flex gap-[77px] items-center'>
+                <div className='flex  justify-between items-center'>
                     <span className='text-[#252525] font-normal leading-[110%] tracking-[-0.24px]'>Height</span>
                     <span className='text-[#535359] text-[12px] font-normal leading-[110%] tracking-[-0.24px]'>180 cm</span>
                 </div>
 
-                <div className='flex gap-[77px] items-center'>
+                <div className='flex  justify-between items-center'>
                     <span className='text-[#252525] font-normal leading-[110%] tracking-[-0.24px]'>Weight</span>
                     <span className='text-[#535359] text-[12px] font-normal leading-[110%] tracking-[-0.24px]'>74 kg</span>
                 </div>
 
-                <div className='flex gap-[77px] items-center'>
+                <div className='flex  justify-between items-center'>
                     <span className='text-[#252525] font-normal leading-[110%] tracking-[-0.24px]'>BMI</span>
                     <div className='flex flex-col gap-[5px]'>
                         <span className='text-[#535359] text-[12px] font-normal leading-[110%] tracking-[-0.24px]'>22.8kg/m2</span>
@@ -61,7 +61,7 @@ export const Profile = () => {
                     </div>
                 </div>
 
-                <div className='flex gap-[77px] items-center'>
+                <div className='flex  justify-between items-center'>
                     <span className='text-[#252525] font-normal leading-[110%] tracking-[-0.24px]'>BMR</span>
                     <span className='text-[#535359] text-[12px] font-normal leading-[110%] tracking-[-0.24px]'>1,745 Cal</span>
                 </div>
