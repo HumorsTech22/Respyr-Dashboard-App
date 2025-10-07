@@ -95,24 +95,7 @@ export default function Sidebar() {
           </Link>
         </nav>
       </div>
-      <div className="mb-10">
-        <div className="flex gap-3 px-10 py-5">
-          <Image
-            src="/assets/icons/Vector (10).svg"
-            alt="Vector (10)"
-            width={20}
-            height={20}
-          />
-          <p className="font-normal text-[15px] text-[#5B5B5B] tracking-[-0.04em]">
-            Export Data
-          </p>
-        </div>
-        <p
-          className={`${mulish.className} text-[#A1A1A1] font-normal text-[10px] tracking-[-0.04em]`}
-        >
-          All rights reserved by Humors tech Pvt. Ltd. 2024
-        </p>
-      </div>
+     
     </div>
   );
 }

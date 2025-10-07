@@ -30,12 +30,12 @@ export const LineChart = () => {
                     </div>
                     
                     {/* Fixed dropdown with proper border */}
-                    <div className='relative pt-[25px]'>
+                    {/* <div className='relative pt-[25px]'>
                         <div className='flex items-center gap-2 py-2 pl-[20px] pr-[1px] border-b-[1.5px] border-[#E0E0E0]'>
                             <span className='text-[#5B5B5B] text-[12px] font-normal leading-normal tracking-[-0.48px]'>All time</span>
                             <IoIosArrowDown className="text-[#5B5B5B]" />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 
                 <div>

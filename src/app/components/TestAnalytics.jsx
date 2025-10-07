@@ -5,6 +5,8 @@ import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useState, useMemo, useRef, useEffect } from "react";
+import Link from "next/link";
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -324,7 +326,8 @@ export default function TestAnalytics() {
         <div className="flex flex-col gap-[25px]">
           <div className="max-h-[300px] overflow-y-auto pr-2 scrollbar-hide">
             {testData.map((log, index) => (
-              <div
+              <Link
+              href="/subjectprofile"
                 key={index}
                 className="flex gap-5 items-center justify-between mb-[25px] cursor-pointer"
               >
@@ -359,7 +362,7 @@ export default function TestAnalytics() {
                     {calculateAverageScore(log)}%
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

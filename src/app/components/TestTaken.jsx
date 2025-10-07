@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { IoIosArrowDown } from "react-icons/io";
+import { useState, useRef, useEffect } from "react";
+
 
 
 ChartJS.register(
@@ -22,6 +24,26 @@ ChartJS.register(
 );
 
 export default function TestTaken() {
+
+const [open, setOpen] = useState(false);
+const [rangeLabel, setRangeLabel] = useState("Last 7 days");
+const menuRef = useRef(null);
+
+useEffect(() => {
+  const handleClickOutside = (e) => {
+    if (menuRef.current && !menuRef.current.contains(e.target)) setOpen(false);
+  };
+  const handleEsc = (e) => e.key === "Escape" && setOpen(false);
+  document.addEventListener("mousedown", handleClickOutside);
+  document.addEventListener("keydown", handleEsc);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+    document.removeEventListener("keydown", handleEsc);
+  };
+}, []);
+
+
+
   // Chart data
   const data = {
     labels: ["1 May", "2 May", "3 May", "4 May", "5 May", "6 May"],
@@ -123,12 +145,48 @@ export default function TestTaken() {
       <p className="text-[#5B5B5B] font-normal text-[15px] tracking-[-0.04em]">
         Test Taken
       </p>
-      <div className="flex gap-[5px]">
-        <p className="text-[#535359] font-medium text-[12px] tracking-[-0.02em]">
-          One week
-        </p>
-        <IoIosArrowDown className="text-[#535359]" />
-      </div>
+    <div className="relative" ref={menuRef}>
+  <button
+    type="button"
+    onClick={() => setOpen((v) => !v)}
+    className="flex items-center gap-[5px] cursor-pointer focus:outline-none"
+    aria-haspopup="menu"
+    aria-expanded={open ? "true" : "false"}
+  >
+    <p className="text-[#535359] font-medium text-[12px] tracking-[-0.02em]">
+      {rangeLabel}
+    </p>
+    <IoIosArrowDown className={`text-[#535359] transition-transform ${open ? "rotate-180" : ""}`} />
+  </button>
+
+  {open ? (
+    <div
+      role="menu"
+      className="absolute right-0 mt-2 w-40 rounded-md border border-[#E5E7EB] bg-white shadow-lg z-20"
+    >
+      <ul className="py-1 text-sm text-[#535359]">
+        {["Last 7 days", "Last 1 Month"].map((opt) => (
+          <li key={opt}>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setRangeLabel(opt);
+                setOpen(false);
+              }}
+              className={`w-full text-left px-3 py-2 cursor-pointer hover:bg-gray-100 ${
+                rangeLabel === opt ? "bg-gray-50" : ""
+              }`}
+            >
+              {opt}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : null}
+</div>
+
     </div>
     <div className="max-w-[318px] max-h-[200px]">
       <Bar data={data} options={options} />

@@ -4,7 +4,7 @@ export default function HistoryTable() {
             <div className="w-full flex flex-col gap-5 px-5 pt-[30px] rounded-[20px] bg-white shadow-[0_0_10px_5px_rgba(0,0,0,0.05)]">
                 <div className="flex flex-col gap-6">
                     <span className="text-[#5B5B5B] text-[25px] font-semibold leading-normal tracking-[-1px]">Test History</span>
-                    <span className="text-[#5B5B5B] text-[15px] font-semibold leading-[110%] tracking-[-0.3px]">2025</span>
+                    
                 </div>
 
 

@@ -29,7 +29,7 @@ export default function Graph() {
   const canvasRef = useRef(null);
   const [grads, setGrads] = useState(null);
 
-  const labels = ["15 May", "16 May", "17 May", "18 May", "19 May"];
+  const labels = ["15 May", "16 May", "17 May", "18 May", "19 May", "20 May", "21 May"];
   const series = {
     good: [86, 89, 90, 92, 94, 95, 96],
   };
@@ -59,7 +59,7 @@ export default function Graph() {
         data: series.good,
         borderColor: "#22c55e",
         pointBackgroundColor: "#22c55e",
-        fill: true,
+        fill: false,
         backgroundColor: grads?.good || "transparent",
         tension: 0.35,
         borderWidth: 2,
