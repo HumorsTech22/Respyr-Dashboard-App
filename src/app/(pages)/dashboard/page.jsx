@@ -7,11 +7,11 @@ import Gender from "@/app/components/Gender"
 
 
 
-export default function Dashboard(){
-    return(
-        <>
-        <div className="flex w-full ">
-        {/* <div> <Sidebar /></div> */}
+export default function Dashboard() {
+  return (
+    <>
+      <div className="flex w-full ">
+
         <div className="flex w-full flex-col  px-5  ">
           <Header />
           <div className="flex xl:flex-row  flex-col w-full gap-5 ">
@@ -20,7 +20,7 @@ export default function Dashboard(){
               <TestAnalytics />
             </div>
             <div className="xl:w-[35%] w-full">
-              {/* <Scorecard/> */}
+
               <Gender />
             </div>
 
@@ -30,8 +30,8 @@ export default function Dashboard(){
 
         </div>
       </div>
-        </>
-    )
+    </>
+  )
 }
 
 

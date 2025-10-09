@@ -7,14 +7,12 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function TestAnalytics() {
   const [selectedScoreType, setSelectedScoreType] = useState("sugar_score");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -28,7 +26,6 @@ export default function TestAnalytics() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   // ✅ Static data instead of API
   const testData = [
@@ -72,7 +69,6 @@ export default function TestAnalytics() {
       respiratory_score: 25,
       gut_score: 18,
     },
-
     {
       name: "Humors",
       date_time: "2025-09-27T09:15:00",
@@ -138,6 +134,52 @@ export default function TestAnalytics() {
 
   const chartCounts = calculateChartData();
   const totalPatients = testData.length;
+
+  // Calculate badge positions on the outer edge of the doughnut
+  const getBadgePositions = () => {
+    const total = chartCounts.good + chartCounts.fair + chartCounts.poor;
+    if (total === 0) {
+      return {
+        good: { left: "50%", top: "10%" },
+        fair: { left: "90%", top: "75%" },
+        poor: { left: "50%", top: "90%" }
+      };
+    }
+
+    // Calculate angles for each segment
+    const goodPercentage = chartCounts.good / total;
+    const fairPercentage = chartCounts.fair / total;
+    const poorPercentage = chartCounts.poor / total;
+
+    // Start angle (starting from top -90 degrees)
+    const startAngle = -90;
+
+    // Calculate middle points of each segment (in degrees)
+    const goodMiddle = startAngle + (goodPercentage * 360) / 2;
+    const fairMiddle = startAngle + goodPercentage * 360 + (fairPercentage * 360) / 2;
+    const poorMiddle = startAngle + goodPercentage * 360 + fairPercentage * 360 + (poorPercentage * 360) / 2;
+
+    // Convert angles to positions on the outer edge (85% from center)
+    const radius = 85;
+    const goodPosition = getPositionOnCircle(goodMiddle, radius);
+    const fairPosition = getPositionOnCircle(fairMiddle, radius);
+    const poorPosition = getPositionOnCircle(poorMiddle, radius);
+
+    return {
+      good: goodPosition,
+      fair: fairPosition,
+      poor: poorPosition,
+    };
+  };
+
+  const getPositionOnCircle = (angle, radius) => {
+    const rad = (angle * Math.PI) / 180;
+    const x = 50 + radius * Math.cos(rad);
+    const y = 50 + radius * Math.sin(rad);
+    return { left: `${x}%`, top: `${y}%` };
+  };
+
+  const badgePositions = getBadgePositions();
 
   // Chart data
   const chartData = {
@@ -209,7 +251,6 @@ export default function TestAnalytics() {
     { label: "Average Score", value: "average" },
   ];
 
-
   const handleScoreTypeSelect = (value) => {
     setSelectedScoreType(value);
     setIsDropdownOpen(false);
@@ -270,23 +311,52 @@ export default function TestAnalytics() {
           </div>
         </div>
 
-  <div className="flex justify-center items-center">
-        <div className="relative w-full max-w-[min(100%,325px)] aspect-square">
-          <Doughnut
-            data={chartData}
-            options={chartOptions}
-            plugins={[customPlugin]}
-            style={{ padding: "40px" }}
-          />
-          <div className="absolute top-[40%] left-[7%] text-[#535359] font-semibold text-[15px]  flex items-center justify-center w-[50px] h-[50px] bg-white rounded-full shadow-[0px_4px_22.7px_0px_#00000026]">
-            12
+        <div className="flex justify-center items-center">
+          <div className="relative w-full max-w-[min(100%,325px)] aspect-square">
+            <Doughnut
+              data={chartData}
+              options={chartOptions}
+              plugins={[customPlugin]}
+              style={{ padding: "40px" }}
+            />
+
+            {/* Good Count Badge */}
+            {/* <div
+              className="absolute text-[#535359] font-semibold text-[15px] flex items-center justify-center w-[50px] h-[50px] bg-white rounded-full shadow-[0px_4px_22.7px_0px_#00000026] transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                border: `2px solid #3FAF58`,
+                left: badgePositions.good.left,
+                top: badgePositions.good.top
+              }}
+            >
+              {chartCounts.good}
+            </div> */}
+
+            {/* Fair Count Badge */}
+            {/* <div
+              className="absolute text-[#535359] font-semibold text-[15px] flex items-center justify-center w-[50px] h-[50px] bg-white rounded-full shadow-[0px_4px_22.7px_0px_#00000026] transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                border: `2px solid #FFC412`,
+                left: badgePositions.fair.left,
+                top: badgePositions.fair.top
+              }}
+            >
+              {chartCounts.fair}
+            </div> */}
+
+            {/* Poor Count Badge */}
+            {/* <div
+              className="absolute text-[#535359] font-semibold text-[15px] flex items-center justify-center w-[50px] h-[50px] bg-white rounded-full shadow-[0px_4px_22.7px_0px_#00000026] transform -translate-x-1/2 -translate-y-1/2"
+              style={{
+                border: `2px solid #EA5455`,
+                left: badgePositions.poor.left,
+                top: badgePositions.poor.top
+              }}
+            >
+              {chartCounts.poor}
+            </div> */}
           </div>
-          <div className="absolute top-[40%] right-[7%]  text-[#535359] font-semibold text-[15px]  flex items-center justify-center w-[50px] h-[50px] bg-white rounded-full shadow-[0px_4px_22.7px_0px_#00000026]">
-            12
-          </div>
-          
         </div>
-      </div>
       </div>
 
       <div className="lg:w-1/2 md:w-2/3 w-full lg:border-l border-l-[#D9D9D9] flex flex-col gap-[42px] md:p-5">
@@ -327,7 +397,7 @@ export default function TestAnalytics() {
           <div className="max-h-[300px] overflow-y-auto pr-2 scrollbar-hide">
             {testData.map((log, index) => (
               <Link
-              href="/subjectprofile"
+                href="/subjectprofile"
                 key={index}
                 className="flex gap-5 items-center justify-between mb-[25px] cursor-pointer"
               >
@@ -359,7 +429,10 @@ export default function TestAnalytics() {
                     }}
                   ></span>
                   <p className="text-[#535359] font-medium text-[15px] tracking-[-0.02em]">
-                    {calculateAverageScore(log)}%
+                    {selectedScoreType === "average"
+                      ? calculateAverageScore(log)
+                      : log[selectedScoreType]
+                    }%
                   </p>
                 </div>
               </Link>

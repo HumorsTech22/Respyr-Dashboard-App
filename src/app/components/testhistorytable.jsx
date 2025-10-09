@@ -2,7 +2,9 @@
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 // dummy rows (swap with your API data later)
 const ROWS = [
@@ -33,11 +35,49 @@ const ROWS = [
     gutScore: 1200,
     avatar: "/assets/img/Group 2216.svg",
   },
+  {
+    subjectName: "Railway Mouse 2",
+    testTaken: "green",
+    sugarScore: 880,
+    liverScore: 720,
+    respiratoryScore: 140,
+    gutScore: 1200,
+    avatar: "/assets/img/Group 2216.svg",
+  },
+  {
+    subjectName: "Respyr Mouse 2",
+    testTaken: "Blue",
+    sugarScore: 828,
+    liverScore: 720,
+    respiratoryScore: 140,
+    gutScore: 1200,
+    avatar: "/assets/img/Group 2216.svg",
+  },
+  {
+    subjectName: "Zebster 2",
+    testTaken: "Black",
+    sugarScore: 188,
+    liverScore: 1720,
+    respiratoryScore: 140,
+    gutScore: 1200,
+    avatar: "/assets/img/Group 2216.svg",
+  },
+  {
+    subjectName: "Reynolds 2",
+    testTaken: "Yellow",
+    sugarScore: 18,
+    liverScore: 220,
+    respiratoryScore: 140,
+    gutScore: 1200,
+    avatar: "/assets/img/Group 2216.svg",
+  },
 ];
 
 export default function TestHistoryTable() {
   const searchParams = useSearchParams();
   const q = (searchParams.get("q") || "").trim().toLowerCase();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const filtered = useMemo(() => {
     if (!q) return ROWS;
@@ -55,71 +95,181 @@ export default function TestHistoryTable() {
     );
   }, [q]);
 
+  // Pagination calculations
+  const totalItems = filtered.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = filtered.slice(startIndex, endIndex);
+
+  // Reset to first page when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [q]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    
+    return pages;
+  };
+
   return (
-<>
-    {/* <div>
-        <div className="flex border border-[#E1E6ED] bg-[#F5F7FA] rounded-[10px] py-[11px] pl-[15px]">
-            <span className="text-[#252525] text-[12px] font-normal leading-[110%] tracking-[-0.24]">Type</span>
-            <span></span>
+    <>
+      {/* Items per page selector */}
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center space-x-2">
+          <label htmlFor="itemsPerPage" className="text-sm text-gray-600">
+            Show:
+          </label>
+          <select
+            id="itemsPerPage"
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            className="border border-gray-300 rounded px-2 py-1 text-sm"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+          <span className="text-sm text-gray-600">entries</span>
         </div>
-      </div> */}
+        
+        {/* Pagination info */}
+        <div className="text-sm text-gray-600">
+          Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} entries
+          {q && " (filtered)"}
+        </div>
+      </div>
 
-    <div className="relative overflow-x-auto pr-2.5">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-          <tr>
-            <th scope="col" className="px-6 py-3">Subject Name</th>
-            <th scope="col" className="px-6 py-3">Test Taken</th>
-            <th scope="col" className="px-6 py-3">Sugar Score</th>
-            <th scope="col" className="px-6 py-3">Liver Score</th>
-            <th scope="col" className="px-6 py-3">Respiratory Score</th>
-            <th scope="col" className="px-6 py-3">Gut Score</th>
-            <th scope="col" className="px-6 py-3">View</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filtered.length === 0 ? (
+      <div className="relative overflow-x-auto pr-2.5">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
-              <td colSpan={7} className="px-6 py-6 text-center text-gray-400">
-                No results for <span className="font-medium">“{q}”</span>
-              </td>
+              <th scope="col" className="px-6 py-3">Subject Name</th>
+              <th scope="col" className="px-6 py-3">Test Taken</th>
+              <th scope="col" className="px-6 py-3">Sugar Score</th>
+              <th scope="col" className="px-6 py-3">Liver Score</th>
+              <th scope="col" className="px-6 py-3">Respiratory Score</th>
+              <th scope="col" className="px-6 py-3">Gut Score</th>
+              <th scope="col" className="px-6 py-3">View</th>
             </tr>
-          ) : (
-            filtered.map((row, i) => (
-              <tr
-                key={i}
-                className="bg-white border-b last:border-0 border-gray-200"
-              >
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  {row.subjectName}
-                </th>
-                <td className="px-6 py-4">{row.testTaken}</td>
-                <td className="px-6 py-4">{row.sugarScore}</td>
-                <td className="px-6 py-4">{row.liverScore}</td>
-                <td className="px-6 py-4">{row.respiratoryScore}</td>
-                <td className="px-6 py-4">{row.gutScore}</td>
-                <td className="px-6 py-4">
-                  <Link href="/patientprofile">
-                    <button className="cursor-pointer">
-                      <Image
-                        src={row.avatar}
-                        width={40}
-                        height={40}
-                        alt="User avatar"
-                      />
-                    </button>
-                  </Link>
+          </thead>
+
+          <tbody>
+            {currentItems.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="px-6 py-6 text-center text-gray-400">
+                  No results for <span className="font-medium">"{q}"</span>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
+            ) : (
+              currentItems.map((row, i) => (
+                <tr
+                  key={i}
+                  className="bg-white border-b last:border-0 border-gray-200"
+                >
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    {row.subjectName}
+                  </th>
+                  <td className="px-6 py-4">{row.testTaken}</td>
+                  <td className="px-6 py-4">{row.sugarScore}</td>
+                  <td className="px-6 py-4">{row.liverScore}</td>
+                  <td className="px-6 py-4">{row.respiratoryScore}</td>
+                  <td className="px-6 py-4">{row.gutScore}</td>
+                  <td className="px-6 py-4">
+                    <Link href="/subjectprofile">
+                      <button className="cursor-pointer">
+                        <Image
+                          src={row.avatar}
+                          width={40}
+                          height={40}
+                          alt="User avatar"
+                        />
+                      </button>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-4 space-y-3 sm:space-y-0">
+          <div className="text-sm text-gray-600">
+            Page {currentPage} of {totalPages}
+          </div>
+          
+          <div className="flex space-x-1 items-center gap-2">
+            {/* Previous Page Arrow */}
+            {currentPage === 1 ? (
+              <MdOutlineKeyboardDoubleArrowLeft 
+                className="text-gray-400 w-[14px] h-[14px] cursor-not-allowed"
+              />
+            ) : (
+              <MdOutlineKeyboardDoubleArrowLeft 
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="text-black w-[14px] h-[14px] cursor-pointer hover:bg-gray-100 rounded"
+              />
+            )}
+
+            {/* Page Numbers */}
+            {getPageNumbers().map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`cursor-pointer px-3 py-1 text-sm border border-gray-300 rounded ${
+                  currentPage === page
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            {/* Next Page Arrow */}
+            {currentPage === totalPages ? (
+              <MdOutlineKeyboardDoubleArrowRight 
+                className="text-gray-400 w-[14px] h-[14px] cursor-not-allowed"
+              />
+            ) : (
+              <MdOutlineKeyboardDoubleArrowRight 
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="text-black w-[14px] h-[14px] cursor-pointer hover:bg-gray-100 rounded"
+              />
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }

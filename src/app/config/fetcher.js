@@ -17,11 +17,11 @@ export async function apiFetcher(endpoint, options = {}) {
     // Check if the response indicates an error
     if (!res.ok || data.status === 'error') {
       const errorMessage = data.error || data.message || `Request failed with status ${res.status}`;
-      
+
       const error = new Error(errorMessage);
       error.status = res.status;
       error.data = data;
-      error.isApiError = true; 
+      error.isApiError = true;
       throw error;
     }
 

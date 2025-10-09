@@ -21,7 +21,9 @@ export default function Sidebar() {
   return (
     <div className=" sticky top-0 hidden lg:flex flex-col items-center justify-between  w-65 h-screen bg-[#FFFFFF] shadow-[4px_0_10px_rgba(0,0,0,0.25)] ">
       <div className="flex flex-col justify-center items-center gap-[54px] w-full  mt-[25px]">
-        <div className="flex  items-center gap-[5.28px]">
+        <Link 
+        href="/dashboard"
+        className="flex  items-center gap-[5.28px]">
           <Image
             src="/assets/icons/logo.png"
             width={87.72}
@@ -31,7 +33,7 @@ export default function Sidebar() {
           <p className="bg-[#308BF9] text-white rounded-full font-semibold text-sm px-2 py-[2px] w-fit ">
             CLINIC
           </p>
-        </div>
+        </Link>
 
         <nav className="flex flex-col items-center w-full">
           <Link
