@@ -1,9 +1,14 @@
 "use client"
 import { useState } from 'react';
 import { LineChart } from './LineChart';
+import { useSelector } from 'react-redux';
 
 export default function Analytics() {
     const [activeTab, setActiveTab] = useState('sugar');
+    const { personal, records } = useSelector((state) => state.profile);
+
+    console.log("Personal data in Analytics:", personal);
+    console.log("Records data in Analytics:", records);
 
     return (
         <div className="">
@@ -15,7 +20,7 @@ export default function Analytics() {
                 <ul className="flex flex-wrap -mb-px text-sm font-medium text-center" role="tablist">
                     <li className="me-[26px]" role="presentation">
                         <button
-                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[0.6px] rounded-t-lg cursor-pointer ${activeTab === 'sugar'
+                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer ${activeTab === 'sugar'
                                     ? 'text-[#308BF9] border-[#308BF9]'
                                     : 'text-[#5B5B5B]  hover:text-gray-600 '
                                 }`}
@@ -28,7 +33,7 @@ export default function Analytics() {
                     </li>
                     <li className="me-[26px]" role="presentation">
                         <button
-                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[0.6px] rounded-t-lg cursor-pointer  ${activeTab === 'liver'
+                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer  ${activeTab === 'liver'
                                     ? 'text-[#308BF9] border-[#308BF9]'
                                     : 'text-[#5B5B5B] border-transparent hover:text-gray-600 '
                                 }`}
@@ -41,7 +46,7 @@ export default function Analytics() {
                     </li>
                     <li className="me-[26px]" role="presentation">
                         <button
-                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[0.6px] rounded-t-lg cursor-pointer ${activeTab === 'respiratory'
+                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer ${activeTab === 'respiratory'
                                     ? 'text-[#308BF9] border-[#308BF9]'
                                     : 'text-[#5B5B5B] border-transparent hover:text-gray-600'
                                 }`}
@@ -54,7 +59,7 @@ export default function Analytics() {
                     </li>
                     <li className="me-[26px]" role="presentation">
                         <button
-                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[0.6px] rounded-t-lg cursor-pointer ${activeTab === 'gut'
+                            className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer ${activeTab === 'gut'
                                     ? 'text-[#308BF9] border-[#308BF9]'
                                     : 'text-[#5B5B5B] border-transparent hover:text-gray-600'
                                 }`}
@@ -69,9 +74,7 @@ export default function Analytics() {
             </div>
 
             <div>
-
-                <LineChart />
-
+                <LineChart activeTab={activeTab} records={records} />
             </div>
         </div>
     );

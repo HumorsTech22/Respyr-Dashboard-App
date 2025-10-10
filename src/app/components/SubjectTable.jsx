@@ -133,8 +133,8 @@ export default function SubjectTable() {
     });
   };
 
-  const handleRowClick = (subjectId) => {
-    router.push(`/subjectprofile?subject_id=${subjectId}`);
+  const handleRowClick = (subjectId, clinicId) => {
+    router.push(`/subjectprofile?subject_id=${subjectId}&clinic_id=${clinicId}`);
   };
 
   const handlePageChange = (page) => {
@@ -273,7 +273,7 @@ export default function SubjectTable() {
               <tr
                 key={subject.subject_id}
                 className={`${index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-700"} border-b dark:border-gray-700 border-gray-200 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors`}
-                onClick={() => handleRowClick(subject.subject_id)}
+                onClick={() => handleRowClick(subject.subject_id, subject.clinic_id)}
               >
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {subject.subject_id}
@@ -284,8 +284,8 @@ export default function SubjectTable() {
                 <td className="px-6 py-4">{formatDate(subject.dttm)}</td>
                 <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                   <Link
-                    href={`/subjectprofile?subject_id=${subject.subject_id}`}
-                    className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
+                    href={`/subjectprofile?subject_id=${subject.subject_id}&clinic_id=${subject.clinic_id}`}
+                    className="bg-[#3FAF58] text-white px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
                   >
                     View All
                   </Link>

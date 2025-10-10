@@ -5,10 +5,7 @@ import Header from "@/app/components/header"
 export default function Subjects() {
     return (
         <>
-
-
             <div className="flex gap-3 w-full">
-
                 <div className="flex flex-col gap-2 w-full px-4">
                     <Header />
                     <SubjectTable />

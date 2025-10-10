@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo, useState, useEffect } from "react";
@@ -75,6 +75,7 @@ const ROWS = [
 
 export default function TestHistoryTable() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const q = (searchParams.get("q") || "").trim().toLowerCase();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -106,6 +107,10 @@ export default function TestHistoryTable() {
   useEffect(() => {
     setCurrentPage(1);
   }, [q]);
+
+  const handleRowClick = () => {
+    router.push(`/subjectprofile`);
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -189,7 +194,8 @@ export default function TestHistoryTable() {
               currentItems.map((row, i) => (
                 <tr
                   key={i}
-                  className="bg-white border-b last:border-0 border-gray-200"
+                  className="bg-white border-b last:border-0 border-gray-200 cursor-pointer"
+                  onClick={() => handleRowClick()}
                 >
                   <th
                     scope="row"
@@ -203,15 +209,11 @@ export default function TestHistoryTable() {
                   <td className="px-6 py-4">{row.respiratoryScore}</td>
                   <td className="px-6 py-4">{row.gutScore}</td>
                   <td className="px-6 py-4">
-                    <Link href="/subjectprofile">
-                      <button className="cursor-pointer">
-                        <Image
-                          src={row.avatar}
-                          width={40}
-                          height={40}
-                          alt="User avatar"
-                        />
-                      </button>
+                    <Link
+                      href="/subjectprofile"
+                      className="bg-[#3FAF58] text-white px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
+                    >
+                      View All
                     </Link>
                   </td>
                 </tr>

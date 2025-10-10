@@ -25,13 +25,16 @@ ChartJS.register(
   Legend
 );
 
-export default function Graph() {
+export default function Graph({ realData }) {
   const canvasRef = useRef(null);
   const [grads, setGrads] = useState(null);
 
-  const labels = ["15 May", "16 May", "17 May", "18 May", "19 May", "20 May", "21 May"];
+  // Use real data if provided, otherwise use dummy data
+  const labels = realData?.labels || ["15 May", "16 May", "17 May", "18 May", "19 May", "20 May", "21 May"];
+  const seriesData = realData?.data || [86, 89, 90, 92, 94, 95, 96];
+
   const series = {
-    good: [86, 89, 90, 92, 94, 95, 96],
+    good: seriesData,
   };
 
   // Create gradients after mount
@@ -47,7 +50,7 @@ export default function Graph() {
     };
 
     setGrads({
-      good: makeGrad("#22c55e", 0.24), // green
+      good: makeGrad("#3FAF58", 0.24), // green
     });
   }, []);
 
