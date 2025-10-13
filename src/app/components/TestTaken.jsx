@@ -84,7 +84,29 @@ export default function TestTaken() {
     plugins: {
       legend: { display: false },
       tooltip: {
-        enabled: false,
+        enabled: true,
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        titleColor: "white",
+        bodyColor: "white",
+        titleFont: {
+          size: 12,
+        },
+        bodyFont: {
+          size: 12,
+        },
+        padding: 10,
+        cornerRadius: 6,
+        displayColors: false,
+        callbacks: {
+          title: function(tooltipItems) {
+            // Show the date (label) in tooltip
+            return tooltipItems[0].label;
+          },
+          label: function(context) {
+            // Show the value in tooltip
+            return `Tests: ${context.parsed.y}`;
+          }
+        }
       },
     },
     scales: {
@@ -123,6 +145,10 @@ export default function TestTaken() {
         },
       },
     },
+    interaction: {
+      intersect: false,
+      mode: 'index',
+    },
   };
 
   const modalOptions = {
@@ -132,7 +158,7 @@ export default function TestTaken() {
       x: {
         ...options.scales.x,
         ticks: {
-          maxTicksLimit: 10, // Show fewer labels in modal for better readability
+          maxTicksLimit: 10,
         }
       }
     }
@@ -153,10 +179,10 @@ export default function TestTaken() {
           <div className="flex flex-col w-1/2 justify-center items-center border-r border-r-[#D9D9D9]">
             <div className="w-fit flex flex-col">
               <span className="text-[#308BF9] bg-[#E4F0FF] text-[30px] py-2 px-5 rounded-t-[10px] text-center">
-                2
+               {new Date().getDate()}
               </span>
-              <span className="bg-[#308BF9] rounded-bl-[10px] rounded-br-[10px] p-2 text-[12px] text-white tracking-wider">
-                MAY
+              <span className="flex justify-center bg-[#308BF9] rounded-bl-[10px] rounded-br-[10px] p-2 text-[12px] text-white tracking-wider">
+                {new Date().toLocaleString('default', { month: 'short' }).toUpperCase()}
               </span>
             </div>
           </div>
@@ -223,15 +249,15 @@ export default function TestTaken() {
 
       {/* Modal for 30 days view */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-lg font-semibold text-[#252525]">
                 Test Taken - Last 30 Days
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
+                className="text-gray-500 hover:text-gray-700 cursor-pointer transition-colors"
               >
                 <IoIosClose size={24} />
               </button>
@@ -244,7 +270,7 @@ export default function TestTaken() {
             <div className="flex justify-end p-6 border-t border-gray-200">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 bg-[#308BF9] text-white rounded-md hover:bg-blue-600 transition-colors"
+                className="cursor-pointer px-4 py-2 bg-[#308BF9] text-white rounded-md hover:bg-blue-600 transition-colors"
               >
                 Close
               </button>

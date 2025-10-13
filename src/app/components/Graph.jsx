@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useEffect, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,82 +25,81 @@ ChartJS.register(
   Legend
 );
 
+const getColor = (y) => {
+  const v = Number(y);
+  if (Number.isNaN(v)) return "#9CA3AF"; // fallback gray
+  if (v >= 80) return "#3FAF58";         // Good (green)
+  if (v >= 61) return "#FFC412";         // Fair (yellow)
+  return "#EA5455";                      // Poor (red)
+};
+
 export default function Graph({ realData }) {
   const canvasRef = useRef(null);
-  const [grads, setGrads] = useState(null);
 
-  // Use real data if provided, otherwise use dummy data
-  const labels = realData?.labels || ["15 May", "16 May", "17 May", "18 May", "19 May", "20 May", "21 May"];
-  const seriesData = realData?.data || [86, 89, 90, 92, 94, 95, 96];
+  const labels = realData?.labels ?? ["15 May", "16 May", "17 May", "18 May", "19 May", "20 May", "21 May"];
+  const seriesData = realData?.data ?? [86, 89, 90, 92, 94, 95, 96];
 
-  const series = {
-    good: seriesData,
-  };
+  const data = useMemo(
+    () => ({
+      labels,
+      datasets: [
+        {
+          label: "Health Score",
+          data: seriesData,
+          // Per-point colors
+          pointBackgroundColor: (ctx) => getColor(ctx.parsed.y),
+          pointBorderColor: (ctx) => getColor(ctx.parsed.y),
+          pointRadius: 3,
+          borderWidth: 2,
+          fill: false,
+          tension: 0.35,
+          // Per-segment color based on the *next* point’s value
+          segment: {
+            borderColor: (ctx) => {
+              // color the segment by the value it’s moving TOWARD (p1)
+              const y = ctx.p1?.parsed?.y;
+              return getColor(y);
+            },
+          },
+        },
+      ],
+    }),
+    [labels, seriesData]
+  );
 
-  // Create gradients after mount
-  useEffect(() => {
-    const ctx = canvasRef.current?.ctx?.canvas?.getContext("2d");
-    if (!ctx) return;
-
-    const makeGrad = (color, alpha = 0.18) => {
-      const g = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height || 300);
-      g.addColorStop(0, `${color}${Math.round(alpha * 255).toString(16).padStart(2, "0")}`);
-      g.addColorStop(1, `${color}00`);
-      return g;
-    };
-
-    setGrads({
-      good: makeGrad("#3FAF58", 0.24), // green
-    });
-  }, []);
-
-  const data = useMemo(() => ({
-    labels,
-    datasets: [
-      {
-        label: "Good",
-        data: series.good,
-        borderColor: "#22c55e",
-        pointBackgroundColor: "#22c55e",
-        fill: false,
-        backgroundColor: grads?.good || "transparent",
-        tension: 0.35,
-        borderWidth: 2,
+  const options = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 0 },
+      plugins: {
+        legend: { display: false },
+        title: { display: false },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          callbacks: {
+            label: (ctx) => `Score: ${ctx.parsed.y}`,
+          },
+        },
       },
-    ],
-  }), [labels, series.good, grads]);
-
-  const options = useMemo(() => ({
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { 
-        display: false
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: "#6b7280", font: { size: 12 } },
+        },
+        y: {
+          min: 0,
+          max: 100,
+          grid: { color: "rgba(0,0,0,0.06)" },
+          ticks: { stepSize: 20 },
+          border: { display: false },
+        },
       },
-      title: { display: true },
-      tooltip: {
-        mode: "index",
-        intersect: false,
-        callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y}` },
-      },
-    },
-    interaction: { mode: "index", intersect: false },
-    scales: {
-      x: { 
-        grid: { display: false }, 
-        ticks: { color: "#6b7280", font: { size: 12 } } 
-      },
-      y: { 
-        min: 0, 
-        max: 100, 
-        grid: { color: "rgba(0,0,0,0.06)" }, 
-        ticks: { stepSize: 20 }, 
-        border: {
-          display: false 
-        }
-      },
-    },
-  }), []);
+    }),
+    []
+  );
 
   return (
     <main className="">

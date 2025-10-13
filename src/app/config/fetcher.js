@@ -1,43 +1,3 @@
-// // config/fetcher.js
-// import { API_BASE_URL } from "./apiConfig";
-
-// export async function apiFetcher(endpoint, options = {}) {
-//   try {
-//     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         ...options.headers,
-//       },
-//       ...options,
-//     });
-
-
-//     const data = await res.json();
-
-//     // Check if the response indicates an error
-//     if (!res.ok || data.status === 'error') {
-//       const errorMessage = data.error || data.message || `Request failed with status ${res.status}`;
-
-//       const error = new Error(errorMessage);
-//       error.status = res.status;
-//       error.data = data;
-//       error.isApiError = true;
-//       throw error;
-//     }
-
-//     return data;
-//   } catch (error) {
-//     if (!error.isApiError) {
-//       console.error("API Fetch Error:", error);
-//     }
-//     throw error;
-//   }
-// }
-
-
-
-
-
 
 // config/fetcher.js
 import { API_BASE_URL } from "./apiConfig";
@@ -64,7 +24,7 @@ export async function apiFetcher(endpoint, options = {}) {
       headers,
       ...options,
     });
-
+console.log("res27:-", res);
     // If unauthorized, try to refresh token and retry
     if (res.status === 401) {
       console.log("Received 401, attempting token refresh...");
@@ -81,9 +41,10 @@ export async function apiFetcher(endpoint, options = {}) {
             Authorization: `Bearer ${newToken}`,
           },
         });
+        console.log("retryRes44:-", retryRes);
 
         const retryData = await retryRes.json();
-
+ console.log("retryData47:-", retryData);
         if (!retryRes.ok || retryData.status === 'error') {
           const errorMessage = retryData.error || retryData.message || `Request failed with status ${retryRes.status}`;
           const error = new Error(errorMessage);

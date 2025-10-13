@@ -22,7 +22,7 @@ export default function Analytics() {
                         <button
                             className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer ${activeTab === 'sugar'
                                     ? 'text-[#308BF9] border-[#308BF9]'
-                                    : 'text-[#5B5B5B]  hover:text-gray-600 '
+                                    : 'text-[#5B5B5B] border-transparent hover:text-gray-600'
                                 }`}
                             onClick={() => setActiveTab('sugar')}
                             type="button"
@@ -30,12 +30,13 @@ export default function Analytics() {
                         >
                             Sugar Score
                         </button>
+
                     </li>
                     <li className="me-[26px]" role="presentation">
                         <button
                             className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer  ${activeTab === 'liver'
-                                    ? 'text-[#308BF9] border-[#308BF9]'
-                                    : 'text-[#5B5B5B] border-transparent hover:text-gray-600 '
+                                ? 'text-[#308BF9] border-[#308BF9]'
+                                : 'text-[#5B5B5B] border-transparent hover:text-gray-600 '
                                 }`}
                             onClick={() => setActiveTab('liver')}
                             type="button"
@@ -47,8 +48,8 @@ export default function Analytics() {
                     <li className="me-[26px]" role="presentation">
                         <button
                             className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer ${activeTab === 'respiratory'
-                                    ? 'text-[#308BF9] border-[#308BF9]'
-                                    : 'text-[#5B5B5B] border-transparent hover:text-gray-600'
+                                ? 'text-[#308BF9] border-[#308BF9]'
+                                : 'text-[#5B5B5B] border-transparent hover:text-gray-600'
                                 }`}
                             onClick={() => setActiveTab('respiratory')}
                             type="button"
@@ -60,8 +61,8 @@ export default function Analytics() {
                     <li className="me-[26px]" role="presentation">
                         <button
                             className={`inline-block p-4 border-b-2 text-[15px] font-normal leading-normal tracking-[-0.6px] rounded-t-lg cursor-pointer ${activeTab === 'gut'
-                                    ? 'text-[#308BF9] border-[#308BF9]'
-                                    : 'text-[#5B5B5B] border-transparent hover:text-gray-600'
+                                ? 'text-[#308BF9] border-[#308BF9]'
+                                : 'text-[#5B5B5B] border-transparent hover:text-gray-600'
                                 }`}
                             onClick={() => setActiveTab('gut')}
                             type="button"

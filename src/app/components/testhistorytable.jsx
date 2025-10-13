@@ -1,90 +1,98 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo, useState, useEffect } from "react";
-import { MdOutlineKeyboardDoubleArrowLeft } from "react-icons/md";
-import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
-
-// dummy rows (swap with your API data later)
-const ROWS = [
-  {
-    subjectName: `Apple MacBook Pro 17"`,
-    testTaken: "Silver",
-    sugarScore: 99,
-    liverScore: 999,
-    respiratoryScore: 199,
-    gutScore: 1999,
-    avatar: "/assets/img/Group 2216.svg",
-  },
-  {
-    subjectName: "Microsoft Surface Pro",
-    testTaken: "White",
-    sugarScore: 120,
-    liverScore: 850,
-    respiratoryScore: 175,
-    gutScore: 1600,
-    avatar: "/assets/img/Group 2216.svg",
-  },
-  {
-    subjectName: "Magic Mouse 2",
-    testTaken: "Black",
-    sugarScore: 88,
-    liverScore: 720,
-    respiratoryScore: 140,
-    gutScore: 1200,
-    avatar: "/assets/img/Group 2216.svg",
-  },
-  {
-    subjectName: "Railway Mouse 2",
-    testTaken: "green",
-    sugarScore: 880,
-    liverScore: 720,
-    respiratoryScore: 140,
-    gutScore: 1200,
-    avatar: "/assets/img/Group 2216.svg",
-  },
-  {
-    subjectName: "Respyr Mouse 2",
-    testTaken: "Blue",
-    sugarScore: 828,
-    liverScore: 720,
-    respiratoryScore: 140,
-    gutScore: 1200,
-    avatar: "/assets/img/Group 2216.svg",
-  },
-  {
-    subjectName: "Zebster 2",
-    testTaken: "Black",
-    sugarScore: 188,
-    liverScore: 1720,
-    respiratoryScore: 140,
-    gutScore: 1200,
-    avatar: "/assets/img/Group 2216.svg",
-  },
-  {
-    subjectName: "Reynolds 2",
-    testTaken: "Yellow",
-    sugarScore: 18,
-    liverScore: 220,
-    respiratoryScore: 140,
-    gutScore: 1200,
-    avatar: "/assets/img/Group 2216.svg",
-  },
-];
+import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import { testHistory } from "../services/authService";
 
 export default function TestHistoryTable() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const q = (searchParams.get("q") || "").trim().toLowerCase();
+
+  const [rows, setRows] = useState([]);      
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
+  // Function to format date from "10/08/2025 14:53:08" to "10/Aug/2025 02:53:08 pm"
+  const formatDate = (dateString) => {
+    if (!dateString || dateString === "-") return "-";
+    
+    try {
+      // Parse the date string (assuming format: MM/DD/YYYY HH:mm:ss)
+      const [datePart, timePart] = dateString.split(' ');
+      const [month, day, year] = datePart.split('/');
+      const [hours, minutes, seconds] = timePart.split(':');
+      
+      // Create date object
+      const date = new Date(year, month - 1, day, hours, minutes, seconds);
+      
+      // Format month as short name
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthName = monthNames[date.getMonth()];
+      
+      // Format time in 12-hour format
+      let hours12 = date.getHours();
+      const ampm = hours12 >= 12 ? 'pm' : 'am';
+      hours12 = hours12 % 12;
+      hours12 = hours12 ? hours12 : 12; // the hour '0' should be '12'
+      
+      // Ensure two digits for minutes and seconds
+      const minutesStr = minutes.toString().padStart(2, '0');
+      const secondsStr = seconds.toString().padStart(2, '0');
+      
+      return `${day}/${monthName}/${year} ${hours12}:${minutesStr}:${secondsStr} ${ampm}`;
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return dateString; // Return original if formatting fails
+    }
+  };
+
+  // fetch on mount (same style as other APIs)
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        setLoading(true);
+        const resp = await testHistory();
+        // resp.records -> map to your table fields
+        const mapped =
+          Array.isArray(resp?.records)
+            ? resp.records.map((r) => ({
+                subjectName: r?.subject_data?.name || r?.subject_data?.subject_id || "-",
+                subjectId: r?.subject_data?.subject_id || "-",
+                testDate: r?.clinical_data?.dttm || "-", // Get the dttm from clinical_data
+                formattedTestDate: formatDate(r?.clinical_data?.dttm), // Format the date
+                testTaken: r?.clinical_data?.record_count || "-", // showing as "Test Taken" column
+                sugarScore: Number(r?.clinical_data?.Db_Score ?? 0),
+                liverScore: Number(r?.clinical_data?.liver_score ?? 0),
+                respiratoryScore: Number(r?.clinical_data?.Blow_Score ?? 0),
+                gutScore: Number(r?.clinical_data?.Gut_Score_per ?? 0),
+                avatar: "/assets/img/Group 2216.svg",
+              }))
+            : [];
+        if (mounted) setRows(mapped);
+      } catch (e) {
+        if (mounted) setErr(e?.message || "Failed to load history");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   const filtered = useMemo(() => {
-    if (!q) return ROWS;
-    return ROWS.filter((r) =>
+    if (!q) return rows;
+    return rows.filter((r) =>
       [
         r.subjectName,
+        r.subjectId,
+        r.testDate,
+        r.formattedTestDate,
         r.testTaken,
         r.sugarScore,
         r.liverScore,
@@ -94,11 +102,11 @@ export default function TestHistoryTable() {
         .map((v) => String(v).toLowerCase())
         .some((v) => v.includes(q))
     );
-  }, [q]);
+  }, [q, rows]);
 
   // Pagination calculations
   const totalItems = filtered.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = filtered.slice(startIndex, endIndex);
@@ -112,31 +120,25 @@ export default function TestHistoryTable() {
     router.push(`/subjectprofile`);
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page) => setCurrentPage(page);
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(1);
   };
 
-  // Generate page numbers for pagination
   const getPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
-    
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    
+
+    for (let i = startPage; i <= endPage; i++) pages.push(i);
     return pages;
   };
 
@@ -144,7 +146,7 @@ export default function TestHistoryTable() {
     <>
       {/* Items per page selector */}
       <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 pl-3">
           <label htmlFor="itemsPerPage" className="text-sm text-gray-600">
             Show:
           </label>
@@ -161,11 +163,14 @@ export default function TestHistoryTable() {
           </select>
           <span className="text-sm text-gray-600">entries</span>
         </div>
-        
+
         {/* Pagination info */}
         <div className="text-sm text-gray-600">
-          Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} entries
-          {q && " (filtered)"}
+          {loading
+            ? "Loading…"
+            : err
+              ? <span className="text-red-500">{err}</span>
+              : <>Showing {totalItems === 0 ? 0 : startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} entries{q && " (filtered)"} </>}
         </div>
       </div>
 
@@ -184,7 +189,19 @@ export default function TestHistoryTable() {
           </thead>
 
           <tbody>
-            {currentItems.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={7} className="px-6 py-6 text-center text-gray-400">
+                  Loading…
+                </td>
+              </tr>
+            ) : err ? (
+              <tr>
+                <td colSpan={7} className="px-6 py-6 text-center text-red-500">
+                  {err}
+                </td>
+              </tr>
+            ) : currentItems.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-6 py-6 text-center text-gray-400">
                   No results for <span className="font-medium">"{q}"</span>
@@ -194,21 +211,24 @@ export default function TestHistoryTable() {
               currentItems.map((row, i) => (
                 <tr
                   key={i}
-                  className="bg-white border-b last:border-0 border-gray-200 cursor-pointer"
-                  onClick={() => handleRowClick()}
+                  className=" bg-white border-b last:border-0 border-gray-200 cursor-pointer"
+                  onClick={handleRowClick}
                 >
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    {row.subjectName}
+                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <div className="flex flex-col">
+                      <span className="font-semibold">{row.subjectName}</span>
+                      <div className="flex flex-col text-xs text-gray-500 mt-1">
+                        <span>ID: {row.subjectId}</span>
+                        <span>Date: {row.formattedTestDate}</span>
+                      </div>
+                    </div>
                   </th>
-                  <td className="px-6 py-4">{row.testTaken}</td>
-                  <td className="px-6 py-4">{row.sugarScore}</td>
-                  <td className="px-6 py-4">{row.liverScore}</td>
-                  <td className="px-6 py-4">{row.respiratoryScore}</td>
-                  <td className="px-6 py-4">{row.gutScore}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 text-[#535359]">{row.testTaken}</td>
+                  <td className="px-6 py-4 text-[#535359]">{row.sugarScore}%</td>
+                  <td className="px-6 py-4 text-[#535359]">{row.liverScore}%</td>
+                  <td className="px-6 py-4 text-[#535359]">{row.respiratoryScore}%</td>
+                  <td className="px-6 py-4 text-[#535359]">{row.gutScore}%</td>
+                  <td className="px-6 py-4 text-[#535359]">
                     <Link
                       href="/subjectprofile"
                       className="bg-[#3FAF58] text-white px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
@@ -224,47 +244,38 @@ export default function TestHistoryTable() {
       </div>
 
       {/* Pagination Controls */}
-      {totalPages > 1 && (
+      {(!loading && !err && totalPages > 1) && (
         <div className="flex flex-col sm:flex-row items-center justify-between mt-4 space-y-3 sm:space-y-0">
           <div className="text-sm text-gray-600">
             Page {currentPage} of {totalPages}
           </div>
-          
+
           <div className="flex space-x-1 items-center gap-2">
-            {/* Previous Page Arrow */}
             {currentPage === 1 ? (
-              <MdOutlineKeyboardDoubleArrowLeft 
-                className="text-gray-400 w-[14px] h-[14px] cursor-not-allowed"
-              />
+              <MdOutlineKeyboardDoubleArrowLeft className="text-gray-400 w-[14px] h-[14px] cursor-not-allowed" />
             ) : (
-              <MdOutlineKeyboardDoubleArrowLeft 
+              <MdOutlineKeyboardDoubleArrowLeft
                 onClick={() => handlePageChange(currentPage - 1)}
                 className="text-black w-[14px] h-[14px] cursor-pointer hover:bg-gray-100 rounded"
               />
             )}
 
-            {/* Page Numbers */}
             {getPageNumbers().map((page) => (
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
                 className={`cursor-pointer px-3 py-1 text-sm border border-gray-300 rounded ${
-                  currentPage === page
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "hover:bg-gray-100"
+                  currentPage === page ? "bg-blue-600 text-white border-blue-600" : "hover:bg-gray-100"
                 }`}
               >
                 {page}
               </button>
             ))}
 
-            {/* Next Page Arrow */}
             {currentPage === totalPages ? (
-              <MdOutlineKeyboardDoubleArrowRight 
-                className="text-gray-400 w-[14px] h-[14px] cursor-not-allowed"
-              />
+              <MdOutlineKeyboardDoubleArrowRight className="text-gray-400 w-[14px] h-[14px] cursor-not-allowed" />
             ) : (
-              <MdOutlineKeyboardDoubleArrowRight 
+              <MdOutlineKeyboardDoubleArrowRight
                 onClick={() => handlePageChange(currentPage + 1)}
                 className="text-black w-[14px] h-[14px] cursor-pointer hover:bg-gray-100 rounded"
               />

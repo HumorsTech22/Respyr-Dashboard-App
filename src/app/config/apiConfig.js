@@ -13,6 +13,10 @@ export const API_ENDPOINTS = {
   SUBJECTS:{
     TABLE:"/clinicalapp/api/fetch_subjects.php",
     PROFILE:"/clinicalapp/api/fetch_clinical_scores.php"
+  },
+  TEST:{
+    HISTORY:"/clinicalapp/api/fetch_clinic_history.php"
   }
+
   
 };

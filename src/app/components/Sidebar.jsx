@@ -50,6 +50,11 @@ export default function Sidebar() {
               width={20}
               height={20}
               className="cursor-pointer"
+              style={{
+                filter: isActive("/dashboard") 
+                  ? "invert(44%) sepia(91%) saturate(1558%) hue-rotate(195deg) brightness(98%) contrast(97%)" 
+                  : "invert(63%) sepia(0%) saturate(0%) hue-rotate(188deg) brightness(93%) contrast(89%)"
+              }}
             />
             <span className="text-[15px] cursor-pointer font-normal tracking-[-0.04em]">
               Dashboard
@@ -70,6 +75,11 @@ export default function Sidebar() {
               width={20}
               height={20}
               className="cursor-pointer"
+              style={{
+                filter: isActive("/testhistory") 
+                  ? "invert(44%) sepia(91%) saturate(1558%) hue-rotate(195deg) brightness(98%) contrast(97%)" 
+                  : "invert(63%) sepia(0%) saturate(0%) hue-rotate(188deg) brightness(93%) contrast(89%)"
+              }}
             />
             <span className="text-[15px] cursor-pointer font-normal tracking-[-0.04em]">
               Test History
@@ -90,6 +100,11 @@ export default function Sidebar() {
               width={20}
               height={20}
               className="cursor-pointer"
+              style={{
+                filter: isActive("/subjects") 
+                  ? "invert(44%) sepia(91%) saturate(1558%) hue-rotate(195deg) brightness(98%) contrast(97%)" 
+                  : "invert(63%) sepia(0%) saturate(0%) hue-rotate(188deg) brightness(93%) contrast(89%)"
+              }}
             />
             <span className="text-[15px] cursor-pointer font-normal tracking-[-0.04em]">
               Subjects
@@ -97,7 +112,6 @@ export default function Sidebar() {
           </Link>
         </nav>
       </div>
-     
     </div>
   );
 }
