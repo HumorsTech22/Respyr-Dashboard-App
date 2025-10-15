@@ -79,7 +79,7 @@ return (
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-2">
+          <label htmlFor="email" className="text-[#252525] block text-sm font-medium mb-2">
             Email
           </label>
           <input
@@ -90,13 +90,13 @@ return (
                 autoComplete="false"
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full text-[#252525] p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label htmlFor="password" className="text-[#252525] block text-sm font-medium">
               Password
             </label>
            
@@ -109,7 +109,7 @@ return (
             autoComplete="false"
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full text-[#252525] p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 

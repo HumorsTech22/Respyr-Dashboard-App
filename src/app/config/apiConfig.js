@@ -16,6 +16,12 @@ export const API_ENDPOINTS = {
   },
   TEST:{
     HISTORY:"/clinicalapp/api/fetch_clinic_history.php"
+  },
+  CALENDER:{
+    DATEWISE:"/clinicalapp/api/fetch_data_by_date.php"
+  },
+  TESTTAKENGRAPH:{
+    NUMBEROFTEST:"/clinicalapp/api/test_count.php"
   }
 
   

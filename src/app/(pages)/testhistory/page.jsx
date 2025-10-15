@@ -6,12 +6,9 @@ export default function TestHistory(){
     return(
         <>
      <div className="flex gap-3 w-full">
-         {/* <div>
-            <Sidebar/>
-         </div> */}
-
+       
         <div className="flex flex-col gap-2 w-full px-4">
-            <Header/>
+            <Header  enableSubjects={false} enableDatewise={false}/>
             <p className="text-[#252525] text-[18px] font-semibold pl-3">Test Logo</p>
             <TestHistoryTable/>
         </div>
