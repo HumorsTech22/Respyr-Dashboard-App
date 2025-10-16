@@ -65,6 +65,7 @@ export default function TestHistoryTable() {
             ? resp.records.map((r) => ({
                 subjectName: r?.subject_data?.name || r?.subject_data?.subject_id || "-",
                 subjectId: r?.subject_data?.subject_id || "-",
+                clinicId: r?.clinical_data?.login_id || "-", // Add clinic_id from login_id
                 testDate: r?.clinical_data?.dttm || "-", // Get the dttm from clinical_data
                 formattedTestDate: formatDate(r?.clinical_data?.dttm), // Format the date
                 testTaken: r?.clinical_data?.record_count || "-", // showing as "Test Taken" column
@@ -91,6 +92,7 @@ export default function TestHistoryTable() {
       [
         r.subjectName,
         r.subjectId,
+        r.clinicId,
         r.testDate,
         r.formattedTestDate,
         r.testTaken,
@@ -116,8 +118,8 @@ export default function TestHistoryTable() {
     setCurrentPage(1);
   }, [q]);
 
-  const handleRowClick = () => {
-    router.push(`/subjectprofile`);
+  const handleRowClick = (row) => {
+    router.push(`/subjectprofile?subject_id=${row.subjectId}&clinic_id=${row.clinicId}`);
   };
 
   const handlePageChange = (page) => setCurrentPage(page);
@@ -212,7 +214,7 @@ export default function TestHistoryTable() {
                 <tr
                   key={i}
                   className=" bg-white border-b last:border-0 border-gray-200 cursor-pointer"
-                  onClick={handleRowClick}
+                  onClick={() => handleRowClick(row)}
                 >
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     <div className="flex flex-col">
@@ -230,8 +232,9 @@ export default function TestHistoryTable() {
                   <td className="px-6 py-4 text-[#535359]">{row.gutScore}%</td>
                   <td className="px-6 py-4 text-[#535359]">
                     <Link
-                      href="/subjectprofile"
+                      href={`/subjectprofile?subject_id=${row.subjectId}&clinic_id=${row.clinicId}`}
                       className="bg-[#3FAF58] text-white px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
+                      onClick={(e) => e.stopPropagation()} // Prevent row click event
                     >
                       View All
                     </Link>

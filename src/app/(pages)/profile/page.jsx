@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Header from "@/app/components/header";
+import ProtectedRoute from "@/app/components/ProtectedRoute";
 
 export default function LoginUser() {
   const [clinicInfo, setClinicInfo] = useState(null);
@@ -40,6 +41,7 @@ export default function LoginUser() {
   if (loading) {
     return (
       <>
+      <ProtectedRoute>
         <Header />
         <div className="flex justify-center items-center mt-20">
           <div className="w-full max-w-md bg-[#F5F7FA] shadow-lg rounded-2xl p-6">
@@ -57,6 +59,7 @@ export default function LoginUser() {
             </div>
           </div>
         </div>
+        </ProtectedRoute>
       </>
     );
   }

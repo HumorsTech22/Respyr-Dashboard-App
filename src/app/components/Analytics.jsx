@@ -6,10 +6,7 @@ import { useSelector } from 'react-redux';
 export default function Analytics() {
     const [activeTab, setActiveTab] = useState('sugar');
     const { personal, records } = useSelector((state) => state.profile);
-
-    console.log("Personal data in Analytics:", personal);
-    console.log("Records data in Analytics:", records);
-
+    
     return (
         <div className="">
             <p className="text-[#5B5B5B] font-semibold leading-normal tracking-[-1px] text-[25px] mb-6">

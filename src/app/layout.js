@@ -4,6 +4,8 @@ import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import { Toaster } from 'sonner';
 import { ReduxProvider } from './providers';
+import { AuthProvider } from "./context/AuthContext";
+import NavigationGuard from "./components/NavigationGuard";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -35,7 +37,10 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
        <ReduxProvider>
           <ClientLayout>
+            <AuthProvider>
+          <NavigationGuard />
             {children}
+             </AuthProvider>
             <Toaster />
           </ClientLayout>
         </ReduxProvider>

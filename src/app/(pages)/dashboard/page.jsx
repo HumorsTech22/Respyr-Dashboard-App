@@ -45,13 +45,13 @@
 
 
 "use client"
-import Image from "next/image";
+
 import TestTaken from "@/app/components/TestTaken";
 import TestAnalytics from "@/app/components/TestAnalytics";
-import Sidebar from "@/app/components/Sidebar";
 import Header from "@/app/components/header";
 import Gender from "@/app/components/Gender"
 import { useSelector } from "react-redux";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 export default function Dashboard() {
   // Get selectedDate from Redux store instead of local state
@@ -59,6 +59,7 @@ export default function Dashboard() {
   
   return (
     <>
+     <ProtectedRoute>
       <div className="flex w-full ">
         <div className="flex w-full flex-col  px-5  ">
           <Header />
@@ -74,6 +75,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      </ProtectedRoute>
     </>
   )
 }

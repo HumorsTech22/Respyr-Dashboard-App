@@ -288,7 +288,7 @@ export default function SubjectTable() {
                     className="bg-[#3FAF58] text-white px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
                   >
                     View All
-                  </Link>
+                  </Link> 
                 </td>
               </tr>
             ))}

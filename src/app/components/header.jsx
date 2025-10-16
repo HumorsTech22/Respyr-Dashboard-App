@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedDate, fetchDatewiseThunk } from "../lib/store/datewiseSlice";
 
 const Header = ({
-  // Toggle features per page if needed; still also gated by route === "/dashboard"
   enableSubjects = true,
   enableDatewise = true,
 } = {}) => {
@@ -205,9 +204,9 @@ const Header = ({
     }
   })();
 
-  // ---- render ----
+
   return (
-    <div className="md:static sticky -top-21 z-50 md:px-10 flex md:flex-row flex-col gap-y-[15px] bg-white justify-between items-center py-7">
+    <div className="md:static sticky -top-21 z-50 flex md:flex-row flex-col gap-y-[15px] bg-white justify-between items-center py-7">
       {/* Left: Calendar (only on dashboard) */}
       <div className="flex items-center justify-between w-full md:w-auto ">
         {isDashboardPage && (
