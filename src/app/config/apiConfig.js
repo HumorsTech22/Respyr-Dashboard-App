@@ -22,6 +22,9 @@ export const API_ENDPOINTS = {
   },
   TESTTAKENGRAPH:{
     NUMBEROFTEST:"/clinicalapp/api/test_count.php"
+  },
+  DASHBOARD:{
+    TOTALTEST:"/clinicalapp/api/fetch_clinic_test_stat.php"
   }
 
   

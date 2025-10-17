@@ -168,7 +168,7 @@ export default function SubjectTable() {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#308BF9"></div>
         <span className="ml-2">Loading subjects...</span>
       </div>
     );
@@ -194,7 +194,7 @@ export default function SubjectTable() {
     <div>
       {/* Optional: show active filter */}
       {q && (
-        <div className="text-sm text-gray-600 mb-3">
+        <div className="text-md text-[#535359] mb-3">
           Showing results for <span className="font-semibold">"{q}"</span>
         </div>
       )}
@@ -202,25 +202,25 @@ export default function SubjectTable() {
       {/* Items per page selector */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
-          <label htmlFor="itemsPerPage" className="text-sm text-gray-600">
+          <label htmlFor="itemsPerPage" className="text-md text-[#535359]">
             Show:
           </label>
           <select
             id="itemsPerPage"
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
+              className="border border-[#535359] rounded px-2 py-1 text-sm"
           >
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
           </select>
-          <span className="text-sm text-gray-600">entries</span>
+            <span className="text-md text-[#535359]">entries</span>
         </div>
         
         {/* Pagination info */}
-        <div className="text-sm text-gray-600">
+        <div className="text-md text-[#535359]">
           Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} entries
           {q && " (filtered)"}
         </div>

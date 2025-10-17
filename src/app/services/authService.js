@@ -412,14 +412,34 @@ export const fetchTestCountData = async () => {
   if (!token) throw new Error("No authentication token found");
 
   const decoded = jwtDecode(token);
-  //const loginId = decoded?.data?.clinic_id;
-  //if (!loginId) throw new Error("Login ID not found in token");
+  const loginId = decoded?.data?.clinic_id;
+  if (!loginId) throw new Error("Login ID not found in token");
 
   return apiFetcher(API_ENDPOINTS.TESTTAKENGRAPH.NUMBEROFTEST, {
     method: "POST",
     body: JSON.stringify({
-    //login_id: loginId,
-    login_id: "OFFC"
+    login_id: loginId,
+    //login_id: "OFFC"
     }),
+  });
+};
+
+
+
+// --- Dashboard totals: total_tests, test_used, subject_count, percentage ---
+export const fetchClinicTestStats = async () => {
+  const token = sessionStorage.getItem("access_token");
+  if (!token) throw new Error("No authentication token found");
+
+  const decoded = jwtDecode(token);
+  // const clinicId = decoded?.data?.clinic_id;
+  // if (!clinicId) throw new Error("Clinic ID not found in token");
+
+  // POST { clinic_id } to fetch clinic stats
+  return apiFetcher(API_ENDPOINTS.DASHBOARD.TOTALTEST, {
+    method: "POST",
+    body: JSON.stringify({ 
+
+      clinic_id: "CLN68c9227a580dd" }),
   });
 };

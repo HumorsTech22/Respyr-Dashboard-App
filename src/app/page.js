@@ -37,7 +37,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-lg">Loading...</div>
+        <div className="text-lg text-[#535359]">Loading...</div>
       </div>
     );
   }
@@ -45,7 +45,7 @@ export default function Home() {
   if (isAuthenticated()) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-lg">Redirecting to dashboard...</div>
+        <div className="text-lg text-[#535359]">Redirecting to dashboard...</div>
       </div>
     );
   }
