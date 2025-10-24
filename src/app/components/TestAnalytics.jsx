@@ -68,7 +68,6 @@ export default function TestAnalytics() {
     });
   }, [datewiseData]);
 
-  console.log("testData505:-", testData);
 
   // Format date
   const formatDate = (dateTime) => {
@@ -120,7 +119,6 @@ export default function TestAnalytics() {
   };
 
   const chartCounts = calculateChartData();
-  console.log("chartCounts589:-", chartCounts);
   const totalPatients = testData.length;
 
   const getPositionOnCircle = (angle, radius) => {

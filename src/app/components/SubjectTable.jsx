@@ -285,7 +285,7 @@ export default function SubjectTable() {
                 <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                   <Link
                     href={`/subjectprofile?subject_id=${subject.subject_id}&clinic_id=${subject.clinic_id}`}
-                    className="bg-[#3FAF58] text-white px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
+                    className="bg-[#3FAF58] text-white px-3 py-1 whitespace-nowrap rounded hover:bg-[#3FAF58] transition-colors"
                   >
                     View All
                   </Link> 

@@ -1,13 +1,14 @@
 "use client"
 import { usePathname } from "next/navigation";
 import Sidebar from "./components/Sidebar";
+import ForgotPassword from "./components/forgot-password";
 
 // Ensure this is the default export
 export default function ClientLayout({ children }) { 
   const pathname = usePathname();
 
   // Hide sidebar for specific routes
-  const hideSidebarRoutes = ["/", "not-found"]; // Add routes where you don't want sidebar
+  const hideSidebarRoutes = ["/", "/not-found", "/forgotPassword"]; // Add routes where you don't want sidebar
   const shouldHideSidebar = hideSidebarRoutes.includes(pathname);
 
   return (

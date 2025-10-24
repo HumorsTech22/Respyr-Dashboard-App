@@ -13,7 +13,7 @@ export default function PurchedHistory() {
 
                     <div className="flex flex-1 flex-col gap-2 w-full px-4">
                         <Header />
-                        {/* <p className="text-[#252525] text-[18px] font-semibold">Purchased History</p> */}
+                    <p className="text-[#252525] text-[18px] font-semibold">Purchase History</p>
                         <PurchasedHistoryTable />
                     </div>
 

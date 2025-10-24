@@ -1,9 +1,8 @@
 "use client"
 
 import React, { useState } from "react";
-
 import { loginService } from "../services/authService";
-
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -99,7 +98,12 @@ return (
             <label htmlFor="password" className="text-[#252525] block text-sm font-medium">
               Password
             </label>
-           
+            <Link
+              href="/forgotPassword"
+              className="text-sm text-[#308BF9] hover:underline"
+            >
+              Forgot your password?
+            </Link>
           </div>
           <input
             id="password"

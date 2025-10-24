@@ -1,99 +1,3 @@
-// "use client";
-// import React, { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { fetchClinicStats } from "../lib/store/slices/statsSlice"
-
-// export default function PurchasedHistoryCards() {
-//   const dispatch = useDispatch();
-//   const { data, loading, error } = useSelector((s) => s.stats);
-
-//   useEffect(() => {
-//     if (!data) dispatch(fetchClinicStats());
-//   }, [data, dispatch]);
-
-//   const records = data?.test_count_records ?? [];
-//   const totalRecords = data?.records_count ?? records.length;
-
-//   return (
-//     <div className="space-y-4">
-//       {/* Header */}
-//       <div className="flex items-center justify-between">
-//         <p className="text-[#535359] font-medium">
-//           Total Records: <span className="font-semibold">{totalRecords}</span>
-//         </p>
-//       </div>
-
-//       {/* Error */}
-//       {error && (
-//         <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-//           {String(error)}
-//         </div>
-//       )}
-
-//       {/* Loading shimmer */}
-//       {loading && records.length === 0 && (
-//         <div className="grid gap-3">
-//           {[...Array(4)].map((_, i) => (
-//             <div key={i} className="rounded-lg border bg-gray-50 p-4 animate-pulse">
-//               <div className="h-3 w-1/3 bg-gray-200 mb-2 rounded"></div>
-//               <div className="h-3 w-2/3 bg-gray-200 mb-1 rounded"></div>
-//               <div className="h-3 w-1/4 bg-gray-200 rounded"></div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-
-//       {/* Cards */}
-//       {!loading && records.length > 0 && (
-//         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-//           {records.map((r, index) => {
-//             const dateTime = r.dttm
-//               ? new Date(r.dttm.replace(" ", "T")).toLocaleString(undefined, {
-//                   year: "numeric",
-//                   month: "short",
-//                   day: "numeric",
-//                   hour: "2-digit",
-//                   minute: "2-digit",
-//                 })
-//               : "-";
-
-//             return (
-//               <div
-//                 key={r.id ?? index}
-//                 className="border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all bg-white cursor-pointer"
-//               >
-                
-
-//                 <div className="flex items-center justify-between mt-3">
-//                   <div>
-//                     <p className="text-sm text-[#535359]">Test Purchased</p>
-//                     <p className="text-lg font-semibold text-[#252525]">
-//                       {r.test_count}
-//                     </p>
-//                   </div>
-
-//                   <div className="text-right">
-//                     <p className="text-sm text-[#535359]">Date & Time</p>
-//                     <p className="text-sm font-medium text-[#252525]">{dateTime}</p>
-//                   </div>
-//                 </div>
-//               </div>
-//             );
-//           })}
-//         </div>
-//       )}
-
-//       {/* No data */}
-//       {!loading && records.length === 0 && !error && (
-//         <div className="text-center text-[#7a7a7a] py-6 border rounded-md bg-gray-50">
-//           No records found.
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-
 
 
 
@@ -106,7 +10,6 @@ import { FiBell } from "react-icons/fi";
 export default function PurchasedHistoryNotifications() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((s) => s.stats);
-
   useEffect(() => {
     if (!data) dispatch(fetchClinicStats());
   }, [data, dispatch]);
@@ -125,6 +28,7 @@ export default function PurchasedHistoryNotifications() {
     () =>
       records.map((r, i) => {
         const added = Number(r?.test_count) || 0;
+        const amount = Number(r?.amount) || 0;
         const afterPurchase = remainingNow + added;
 
         // Prefer UNIX timestamp for reliability
@@ -150,6 +54,7 @@ export default function PurchasedHistoryNotifications() {
           id: r.id ?? `rec-${i}`,
           title: "Test Purchased",
           added, // test_count for this record
+          amount,
           remainingNow,
           afterPurchase,
           when,
@@ -215,7 +120,9 @@ export default function PurchasedHistoryNotifications() {
                     {n.added} {n.title}
                   </p>
 
-                
+                  <p className="text-sm font-semibold text-[#252525]">
+                    Amount: <span className="text-[#7a7a7a]"> ₹{n.amount}</span>
+                  </p>
 
                   <time
                     dateTime={n.dateTimeAttr}

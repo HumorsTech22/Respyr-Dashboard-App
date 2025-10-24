@@ -40,7 +40,7 @@ export default function Subjects() {
         {/* Page content */}
         <div className="flex flex-1 flex-col gap-2 w-full px-4">
           <Header />
-          <p className="text-[#252525] text-[18px] font-semibold pl-3">Subjects</p>
+          <p className="text-[#252525] text-[18px] font-semibold">Subjects</p>
           <SubjectTable />
         </div>
 

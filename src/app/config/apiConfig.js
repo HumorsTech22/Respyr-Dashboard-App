@@ -9,6 +9,8 @@ export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: "/clinicalapp/api/login.php",
     REFRESH_TOKEN: "/clinicalapp/api/refresh_token.php",
+    SEND_OTP:"/clinicalapp/api/send_otp.php",
+    UPDATED_PASSWORD:"/clinicalapp/api/update_password.php"
   },
   SUBJECTS:{
     TABLE:"/clinicalapp/api/fetch_subjects.php",

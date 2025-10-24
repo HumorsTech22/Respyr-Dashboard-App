@@ -206,7 +206,7 @@ export default function TestHistoryTable() {
             ) : currentItems.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-6 py-6 text-center text-gray-400">
-                  No results for <span className="font-medium">"{q}"</span>
+                  No results found
                 </td>
               </tr>
             ) : (
@@ -233,7 +233,7 @@ export default function TestHistoryTable() {
                   <td className="px-6 py-4 text-[#535359]">
                     <Link
                       href={`/subjectprofile?subject_id=${row.subjectId}&clinic_id=${row.clinicId}`}
-                      className="bg-[#3FAF58] text-white px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
+                      className="bg-[#3FAF58] text-white whitespace-nowrap px-3 py-1 rounded hover:bg-[#3FAF58] transition-colors"
                       onClick={(e) => e.stopPropagation()} // Prevent row click event
                     >
                       View All
